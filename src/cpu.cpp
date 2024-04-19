@@ -7,7 +7,8 @@
 #include "cpu.hpp"
 
 // Constructor, initialize internal components
-CPU::CPU() {
+template <typename CPUBitSize>
+CPU<CPUBitSize>::CPU() {
     // Initialize registers
     this->registers["A"]  = 0;  // Accumulator
     this->registers["B"]  = 0;  // General purpose register
@@ -21,19 +22,21 @@ CPU::CPU() {
     this->registers["BP"] = 0;  // Base pointer (Points to the current base of the stack)
 
     // Initialize flags
-    this->flags["Z"] = false;  // Zero flag
-    this->flags["N"] = false;  // Negative flag
-    this->flags["H"] = false;  // Half carry flag
-    this->flags["C"] = false;  // Carry flag
+    this->flags["Z"] = false;   // Zero flag
+    this->flags["N"] = false;   // Negative flag
+    this->flags["H"] = false;   // Half carry flag
+    this->flags["C"] = false;   // Carry flag
 }
 
 // Destructor, clean up internal components
-CPU::~CPU() {
+template <typename CPUBitSize>
+CPU<CPUBitSize>::~CPU() {
     // Nothing to clean up for now
 }
 
 // Reset the CPU
-void CPU::reset() {
+template <typename CPUBitSize>
+void CPU<CPUBitSize>::reset() {
     // Reset every existing register to 0
     // (Including %PC, %SP, and %BP)
     for (auto& reg : this->registers) {
@@ -47,7 +50,8 @@ void CPU::reset() {
 }
 
 // Set register value
-void CPU::setRegisterValue(std::string reg, uint8_t value) {
+template <typename CPUBitSize>
+void CPU<CPUBitSize>::setRegisterValue(std::string reg, CPUBitSize value) {
     // Check if the register exists
     if (this->registers.find(reg) != this->registers.end()) {
         // Set the register value
@@ -59,7 +63,8 @@ void CPU::setRegisterValue(std::string reg, uint8_t value) {
 }
 
 // Get register value
-uint8_t CPU::getRegisterValue(std::string reg) {
+template <typename CPUBitSize>
+CPUBitSize CPU<CPUBitSize>::getRegisterValue(std::string reg) {
     // Check if the register exists
     if (this->registers.find(reg) != this->registers.end()) {
         // Return the register value
@@ -71,7 +76,8 @@ uint8_t CPU::getRegisterValue(std::string reg) {
 }
 
 // Set flag value
-void CPU::setFlagValue(std::string flag, bool value) {
+template <typename CPUBitSize>
+void CPU<CPUBitSize>::setFlagValue(std::string flag, bool value) {
     // Check if the flag exists
     if (this->flags.find(flag) != this->flags.end()) {
         // Set the flag value
@@ -83,7 +89,8 @@ void CPU::setFlagValue(std::string flag, bool value) {
 }
 
 // Get flag value
-bool CPU::getFlagValue(std::string flag) {
+template <typename CPUBitSize>
+bool CPU<CPUBitSize>::getFlagValue(std::string flag) {
     // Check if the flag exists
     if (this->flags.find(flag) != this->flags.end()) {
         // Return the flag value
@@ -93,3 +100,10 @@ bool CPU::getFlagValue(std::string flag) {
         throw std::invalid_argument(errorMessage);
     }
 }
+
+// Explicit instantiation of the CPU class (supported CPU bit sizes)
+// This is needed to avoid linker errors
+template class CPU<uint8_t>;
+template class CPU<uint16_t>;
+template class CPU<uint32_t>;
+template class CPU<uint64_t>;

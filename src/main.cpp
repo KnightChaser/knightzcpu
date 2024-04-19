@@ -5,11 +5,14 @@
 //
 
 #include <iostream>
+#include <cstdint>
 #include "cpu.hpp"
 
 int main() {
     // Create a new CPU instance
-    CPU cpu;
+    // In this case, we are using a small and cute 8-bit CPU >w<
+    // (Further, we can create 16-bit, 32-bit, or even 64-bit CPUs!)
+    CPU<uint8_t> cpu;
 
     // Reset the CPU
     cpu.reset();
